@@ -58,7 +58,8 @@ class AuthController extends Controller
         *     )
         * )
         */
-       public function login(Request $request) {
+       public function login(Request $request)
+       {
               $credentials = $request->validate([
                      'email' => 'required|email',
                      'password' => 'required'
@@ -128,7 +129,8 @@ class AuthController extends Controller
         *     ),
         * )
         */
-       public function signup(Request $request) {
+       public function signup(Request $request)
+       {
               $data = $request->validate([
                      'email' => 'required|email',
                      'firstName' => 'required',
@@ -188,7 +190,8 @@ class AuthController extends Controller
         *      )
         * )
         */
-       public function logout() {
+       public function logout()
+       {
               try {
                      auth()->logout();
                      $cookie = Cookie::forget('token');
@@ -200,13 +203,29 @@ class AuthController extends Controller
 
        protected function respondWithTokenAndUserData($token, $data = [])
        {
-
               $defaultTTL = config('jwt.ttl');
               $minutes = $data['remember'] ? $defaultTTL : 0;
 
-              $cookie = cookie('token', $token, $minutes, null, null, false, true);
-              return response()->json(['user' => $data['user'], 'newUser' => $data['newUser'] ?? false])->withCookie($cookie);
+              // Define the cookie with cross-subdomain compatibility
+              $cookie = cookie(
+                     'token',            // Name of the cookie
+                     $token,             // Value of the cookie (JWT token)
+                     $minutes,           // Expiration time in minutes
+                     '/',                // Path
+                     '.nicolaschwiej.fr',       // Domain to allow sharing across subdomains
+                     true,               // Secure: only send over HTTPS
+                     true,               // HttpOnly: prevent JavaScript access
+                     false,              // Raw: no URL encoding
+                     'None'              // SameSite: allow cross-origin cookies
+              );
+
+              // Return the response with the cookie attached
+              return response()->json([
+                     'user' => $data['user'],
+                     'newUser' => $data['newUser'] ?? false
+              ])->withCookie($cookie);
        }
+
 
        /**
         * @OA\Post(
@@ -231,7 +250,8 @@ class AuthController extends Controller
         *      )
         * )
         */
-       public function verifyUser() {
+       public function verifyUser()
+       {
               $user = auth()->user();
               if (!$user) return response()->json(['error' => 'Utilisateur non authentifié'], 401);
               return response()->json(['user' => Utils::getUserData($user)]);
@@ -267,7 +287,8 @@ class AuthController extends Controller
         *     ),
         * )
         */
-       public function verifyEmail(Request $request) {
+       public function verifyEmail(Request $request)
+       {
               $token = $request->input('token');
 
               $user = User::where('verification_token', $token)->first();
@@ -306,7 +327,8 @@ class AuthController extends Controller
         *     )
         * )
         */
-       public function forgotPassword() {
+       public function forgotPassword()
+       {
               $data = request()->validate([
                      'email' => 'required|email',
               ]);
@@ -356,7 +378,8 @@ class AuthController extends Controller
         *
         * )
         */
-       public function resetPassword() {
+       public function resetPassword()
+       {
               $data = request()->validate([
                      'token' => 'required',
                      'password' => 'required|min:8',

@@ -66,6 +66,8 @@ function parseJwt(token: string): any {
 
 function getUserRole(req: NextRequest): string | null {
        const token = req.cookies.get('token');
+       console.log("🚀 ~ getUserRole ~ token:", token);
+       
        if (!token) return null;
 
        try {
@@ -164,8 +166,6 @@ export function middleware(request: NextRequest) {
               // If it's a known route but not allowed, redirect to a safe place, like home or login
               return NextResponse.redirect(new URL('/connexion', request.url));
        }
-
-
        console.log("second return to connexion page")
        return NextResponse.redirect(new URL('/connexion', request.url));
 };
