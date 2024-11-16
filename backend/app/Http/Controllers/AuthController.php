@@ -207,7 +207,7 @@ class AuthController extends Controller
               $minutes = $data['remember'] ? $defaultTTL : 0;
 
               $origin = request()->headers->get('Origin');
-              $allowedDomains = ['nicolaschwiej.fr', 'crahe-arthur.com'];
+              $allowedDomains = ['cesi.nicolaschwiej.fr', 'cube.crahe-arthur.com'];
 
               // Extract the domain part from the origin and match it
               $cookieDomain = collect($allowedDomains)->first(fn($domain) => str_contains($origin, $domain));
