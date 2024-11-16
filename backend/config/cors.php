@@ -12,7 +12,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://cesi.nicolaschwiej.fr', 'https://cube.crahe-arthur.com'],
+    'allowed_origins' => ['https://cesi.nicolaschwiej.fr'],
 
     'allowed_origins_patterns' => [],
 
