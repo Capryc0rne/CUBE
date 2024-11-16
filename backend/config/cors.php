@@ -12,7 +12,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://cube.aio-tools.com','*'],
+    'allowed_origins' => ['cesi.nicolaschwiej.fr', 'cube.crahe-arthur.com'],
 
     'allowed_origins_patterns' => [],
 

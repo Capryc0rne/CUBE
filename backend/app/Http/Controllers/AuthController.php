@@ -206,17 +206,26 @@ class AuthController extends Controller
               $defaultTTL = config('jwt.ttl');
               $minutes = $data['remember'] ? $defaultTTL : 0;
 
-              // Define the cookie with cross-subdomain compatibility
+              $origin = request()->headers->get('Origin');
+              $allowedDomains = ['nicolaschwiej.fr', 'crahe-arthur.com'];
+
+              // Extract the domain part from the origin and match it
+              $cookieDomain = collect($allowedDomains)->first(fn($domain) => str_contains($origin, $domain));
+
+              if (!$cookieDomain) {
+                     return response()->json(['error' => 'Unauthorized domain'], 403);
+              }
+
               $cookie = cookie(
-                     'token',            // Name of the cookie
-                     $token,             // Value of the cookie (JWT token)
-                     $minutes,           // Expiration time in minutes
-                     '/',                // Path
-                     '.nicolaschwiej.fr',       // Domain to allow sharing across subdomains
-                     true,               // Secure: only send over HTTPS
-                     true,               // HttpOnly: prevent JavaScript access
-                     false,              // Raw: no URL encoding
-                     'None'              // SameSite: allow cross-origin cookies
+                     'token',
+                     $token,
+                     $minutes,
+                     '/',
+                     $cookieDomain,
+                     true,
+                     true,
+                     false,
+                     'None'
               );
 
               // Return the response with the cookie attached

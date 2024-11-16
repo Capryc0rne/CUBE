@@ -1,5 +1,11 @@
 <?php
 
+
+/* Will probably never be used since we are only using JWT tokens and that 
+we are overriding the default values in the respondWithTokenAndUserData
+function in the AuthController. Might be relevant if we want to use the
+flash messages or CSRF token cookies */
+
 use Illuminate\Support\Str;
 
 return [
