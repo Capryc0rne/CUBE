@@ -90,8 +90,10 @@ export const config = {
 }
 
 export function middleware(request: NextRequest) {
+       console.log("🚀 ~ middleware ~ request:", request);
        const path = request.nextUrl.pathname;
        const userRole = getUserRole(request);
+       console.log("🚀 ~ middleware ~ userRole:", userRole);
 
        // Redirect authenticated users trying to access routeWithoutAuth paths
        if (userRole && routeWithoutAuth.includes(path)) {
@@ -153,11 +155,17 @@ export function middleware(request: NextRequest) {
                      return NextResponse.next();
               }
 
+              console.log("🚀 ~ middleware ~ isPathAllowed:", isPathAllowed);
+              console.log("🚀 ~ middleware ~ isKnownRoute:", isKnownRoute);
+              console.log("🚀 ~ middleware ~ path:", path);
+              console.log("🚀 ~ middleware ~ allPaths:", allPaths);
+              console.log("🚀 ~ middleware ~ allowedPaths:", allowedPaths);
+              console.log("first return to connexion page")
               // If it's a known route but not allowed, redirect to a safe place, like home or login
               return NextResponse.redirect(new URL('/connexion', request.url));
        }
 
 
-
+       console.log("second return to connexion page")
        return NextResponse.redirect(new URL('/connexion', request.url));
 };
